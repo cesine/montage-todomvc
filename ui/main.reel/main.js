@@ -6,6 +6,14 @@ var Montage = require("montage").Montage,
 
 exports.Main = Montage.create(Component, {
 
+    newTodoForm: {
+        value: null
+    },
+
+    newTodoInput: {
+        value: null
+    },
+
     todoListController: {
         serializable: false,
         value: null
@@ -14,6 +22,26 @@ exports.Main = Montage.create(Component, {
     didCreate: {
         value: function() {
             this.todoListController = ArrayController.create();
+        }
+    },
+
+    prepareForDraw: {
+        value: function() {
+            this.newTodoForm.identifier = "newTodoForm";
+            this.newTodoForm.addEventListener("submit", this, false);
+        }
+    },
+
+    handleNewTodoFormSubmit: {
+        value: function(evt) {
+            evt.preventDefault();
+
+            if ("" === this.newTodoInput.value) {
+                return;
+            }
+
+            this.createTodo(this.newTodoInput.value);
+            this.newTodoInput.value = null;
         }
     },
 
