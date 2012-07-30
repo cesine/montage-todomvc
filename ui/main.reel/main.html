@@ -54,6 +54,16 @@
             "bindings": {
                 "classList.visible": {"<-": "@owner.todoListController.organizedObjects.0"}
             }
+        },
+
+        "toggleAllCheckbox": {
+            "prototype": "montage/ui/native/input-checkbox.reel",
+            "properties": {
+                "element": {"#": "toggle-all"}
+            },
+            "bindings": {
+                "checked": {"<->": "@owner.allCompleted"}
+            }
         }
     }
     </script>
@@ -69,7 +79,7 @@
                     </form>
                 </header>
                 <section data-montage-id="main" id="main">
-                    <input id="toggle-all" type="checkbox">
+                    <input data-montage-id="toggle-all" id="toggle-all" type="checkbox">
                     <label for="toggle-all">Mark all as complete</label>
                     <ul data-montage-id="todo-list" id="todo-list">
                         <li data-montage-id="todoView"></li>

@@ -66,6 +66,18 @@ exports.Main = Montage.create(Component, {
             this.todoListController.removeObjects(todo);
             return todo;
         }
+    },
+
+    allCompleted: {
+        dependencies: ["todoListController.organizedObjects.completed"],
+        get: function() {
+            return this.todoListController.organizedObjects.getProperty("completed").all();
+        },
+        set: function(value) {
+            this.todoListController.organizedObjects.forEach(function(member) {
+                member.completed = value;
+            });
+        }
     }
 
 });
