@@ -64,6 +64,30 @@
             "bindings": {
                 "checked": {"<->": "@owner.allCompleted"}
             }
+        },
+
+        "todoCount": {
+            "prototype": "montage/ui/dynamic-text.reel",
+            "properties": {
+                "element": {"#": "todo-count"}
+            },
+            "bindings": {
+                "value": {"<-": "@owner.todosLeft.count()"}
+            }
+        },
+
+        "itemCountConverter": {
+            "prototype": "ui/main.reel/item-count-converter"
+        },
+
+        "todoCountWording": {
+            "prototype": "montage/ui/dynamic-text.reel",
+            "properties": {
+                "element": {"#": "todo-count-wording"}
+            },
+            "bindings": {
+                "value": {"<-": "@owner.todosLeft.count()", "converter": {"@": "itemCountConverter"}}
+            }
         }
     }
     </script>
@@ -86,8 +110,7 @@
                     </ul>
                 </section>
                 <footer data-montage-id="footer" id="footer">
-                    <!-- This should be `0 items left` by default -->
-                    <span id="todo-count"><strong>1</strong> item left</span>
+                    <span id="todo-count"><strong data-montage-id="todo-count">0</strong> <span data-montage-id="todo-count-wording">items</span> left</span>
                     <!-- Remove this if you don't implement routing -->
                     <ul id="filters">
                         <li>

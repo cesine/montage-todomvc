@@ -78,6 +78,19 @@ exports.Main = Montage.create(Component, {
                 member.completed = value;
             });
         }
+    },
+
+    todosLeft: {
+        dependencies: ["todoListController.organizedObjects.completed"],
+        get: function() {
+
+            if (this.todoListController.organizedObjects) {
+                var todos = this.todoListController.organizedObjects;
+                return todos.filter(function(member) {
+                    return !member.completed;
+                });
+            }
+        }
     }
 
 });
