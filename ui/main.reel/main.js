@@ -104,6 +104,18 @@ exports.Main = Montage.create(Component, {
                 });
             }
         }
+    },
+
+    handleClearCompletedButtonAction: {
+        value: function(evt) {
+            var completedTodos = this.todoListController.organizedObjects.filter(function(todo) {
+                return todo.completed;
+            });
+
+            if (completedTodos.length > 0) {
+                this.todoListController.removeObjects.apply(this.todoListController, completedTodos);
+            }
+        }
     }
 
 });
