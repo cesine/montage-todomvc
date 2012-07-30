@@ -29,6 +29,14 @@ exports.Main = Montage.create(Component, {
         value: function() {
             this.newTodoForm.identifier = "newTodoForm";
             this.newTodoForm.addEventListener("submit", this, false);
+
+            this.addEventListener("destroyTodo", this, true);
+        }
+    },
+
+    captureDestroyTodo: {
+        value: function(evt) {
+            this.destroyTodo(evt.detail.todo);
         }
     },
 
@@ -49,6 +57,13 @@ exports.Main = Montage.create(Component, {
         value: function(title) {
             var todo = Todo.create().initWithTitle(title);
             this.todoListController.addObjects(todo);
+            return todo;
+        }
+    },
+
+    destroyTodo: {
+        value: function(todo) {
+            this.todoListController.removeObjects(todo);
             return todo;
         }
     }

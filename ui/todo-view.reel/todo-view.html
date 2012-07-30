@@ -30,6 +30,20 @@
             "bindings": {
                 "checked": {"<->": "@owner.todo.completed"}
             }
+        },
+
+        "destroyButton": {
+            "prototype": "montage/ui/native/button.reel",
+            "properties": {
+                "element": {"#": "destroyButton"}
+            },
+            "listeners": [
+                {
+                    "type": "action",
+                    "listener": {"@": "owner"},
+                    "capture": true
+                }
+            ]
         }
     }
     </script>
