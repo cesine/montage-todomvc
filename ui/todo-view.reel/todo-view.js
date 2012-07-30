@@ -11,6 +11,16 @@ exports.TodoView = Montage.create(Component, {
         value: null
     },
 
+    didCreate: {
+        value: function() {
+            Object.defineBinding(this, "isCompleted", {
+                boundObject: this,
+                boundObjectPropertyPath: "todo.completed",
+                oneway: true
+            });
+        }
+    },
+
     prepareForDraw: {
         value: function() {
             this.element.addEventListener("dblclick", this, false);
@@ -49,6 +59,24 @@ exports.TodoView = Montage.create(Component, {
         }
     },
 
+    _isCompleted: {
+        value: false
+    },
+
+    isCompleted: {
+        get: function() {
+            return this._isCompleted;
+        },
+        set: function(value) {
+            if (value === this._isCompleted) {
+                return;
+            }
+
+            this._isCompleted = value;
+            this.needsDraw = true;
+        }
+    },
+
     captureBlur: {
         value: function(evt) {
             if (this.isEditing && this.editInput.element === evt.target) {
@@ -81,6 +109,12 @@ exports.TodoView = Montage.create(Component, {
             } else {
                 this.element.classList.remove("editing");
                 this.editInput.element.blur();
+            }
+
+            if (this.isCompleted) {
+                this.element.classList.add("completed");
+            } else {
+                this.element.classList.remove("completed");
             }
         }
     }
