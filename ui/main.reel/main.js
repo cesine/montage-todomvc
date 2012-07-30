@@ -2,6 +2,8 @@ var Montage = require("montage").Montage,
     Component = require("montage/ui/component").Component,
     ArrayController = require("montage/ui/controller/array-controller").ArrayController,
     Todo = require("core/todo").Todo,
+    Serializer = require("montage/core/serializer").Serializer,
+    Deserializer = require("montage/core/deserializer").Deserializer,
     LOCAL_STORAGE_KEY = "todos-montage";
 
 exports.Main = Montage.create(Component, {
@@ -22,6 +24,40 @@ exports.Main = Montage.create(Component, {
     didCreate: {
         value: function() {
             this.todoListController = ArrayController.create();
+            this.load();
+        }
+    },
+
+    load: {
+        value: function() {
+            if (localStorage) {
+                var todoSerialization = localStorage.getItem(LOCAL_STORAGE_KEY);
+
+                if (todoSerialization) {
+                    var deserializer = Deserializer.create(),
+                        self = this;
+                    try {
+                        deserializer.initWithStringAndRequire(todoSerialization, require).deserializeObject(function(todos) {
+                            self.todoListController.initWithContent(todos);
+                        }, require);
+                    } catch(e) {
+                        console.error("Could not load saved tasks.");
+                        console.debug("Could not deserialize", todoSerialization);
+                        console.log(e.stack);
+                    }
+                }
+            }
+        }
+    },
+
+    save: {
+        value: function() {
+            if (localStorage) {
+                var todos = this.todoListController.content,
+                    serializer = Serializer.create().initWithRequire(require);
+
+                localStorage.setItem(LOCAL_STORAGE_KEY, serializer.serializeObject(todos));
+            }
         }
     },
 
@@ -31,6 +67,8 @@ exports.Main = Montage.create(Component, {
             this.newTodoForm.addEventListener("submit", this, false);
 
             this.addEventListener("destroyTodo", this, true);
+
+            window.addEventListener("beforeunload", this, true);
         }
     },
 
@@ -115,6 +153,12 @@ exports.Main = Montage.create(Component, {
             if (completedTodos.length > 0) {
                 this.todoListController.removeObjects.apply(this.todoListController, completedTodos);
             }
+        }
+    },
+
+    captureBeforeunload: {
+        value: function() {
+            this.save();
         }
     }
 
