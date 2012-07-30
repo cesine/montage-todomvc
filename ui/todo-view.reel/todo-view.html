@@ -20,6 +20,16 @@
             "bindings": {
                 "value": {"<-": "@owner.todo.title"}
             }
+        },
+
+        "todoCompletedCheckbox": {
+            "prototype": "montage/ui/native/input-checkbox.reel",
+            "properties": {
+                "element": {"#": "todoCompletedCheckbox"}
+            },
+            "bindings": {
+                "checked": {"<->": "@owner.todo.completed"}
+            }
         }
     }
     </script>
