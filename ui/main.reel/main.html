@@ -34,6 +34,26 @@
             "bindings": {
                 "todo": {"<-": "@todoRepetition.objectAtCurrentIteration"}
             }
+        },
+
+        "main": {
+            "prototype": "montage/ui/dynamic-element.reel",
+            "properties": {
+                "element": {"#": "main"}
+            },
+            "bindings": {
+                "classList.visible": {"<-": "@owner.todoListController.organizedObjects.0"}
+            }
+        },
+
+        "footer": {
+            "prototype": "montage/ui/dynamic-element.reel",
+            "properties": {
+                "element": {"#": "footer"}
+            },
+            "bindings": {
+                "classList.visible": {"<-": "@owner.todoListController.organizedObjects.0"}
+            }
         }
     }
     </script>
@@ -48,16 +68,14 @@
                         <input data-montage-id="new-todo" id="new-todo" placeholder="What needs to be done?" autofocus>
                     </form>
                 </header>
-                <!-- This section should be hidden by default and shown when there are todos -->
-                <section id="main">
+                <section data-montage-id="main" id="main">
                     <input id="toggle-all" type="checkbox">
                     <label for="toggle-all">Mark all as complete</label>
                     <ul data-montage-id="todo-list" id="todo-list">
                         <li data-montage-id="todoView"></li>
                     </ul>
                 </section>
-                <!-- This footer should hidden by default and shown when there are todos -->
-                <footer id="footer">
+                <footer data-montage-id="footer" id="footer">
                     <!-- This should be `0 items left` by default -->
                     <span id="todo-count"><strong>1</strong> item left</span>
                     <!-- Remove this if you don't implement routing -->
