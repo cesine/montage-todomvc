@@ -88,6 +88,16 @@
             "bindings": {
                 "value": {"<-": "@owner.todosLeft.count()", "converter": {"@": "itemCountConverter"}}
             }
+        },
+
+        "completedCount": {
+            "prototype": "montage/ui/dynamic-text.reel",
+            "properties": {
+                "element": {"#": "completed-count"}
+            },
+            "bindings": {
+                "value": {"<-": "@owner.completedTodos.count()"}
+            }
         }
     }
     </script>
@@ -123,7 +133,7 @@
                             <a href="#/completed">Completed</a>
                         </li>
                     </ul>
-                    <button id="clear-completed">Clear completed (1)</button>
+                    <button id="clear-completed">Clear completed (<span data-montage-id="completed-count">0</span>)</button>
                 </footer>
             </section>
             <footer id="info">
