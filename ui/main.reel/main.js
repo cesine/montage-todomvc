@@ -23,8 +23,51 @@ exports.Main = Montage.create(Component, {
 
     didCreate: {
         value: function() {
+            window.addEventListener("hashchange", this, false);
             this.todoListController = ArrayController.create();
+            this.todoListController.clearFilterFunctionOnAddition = false;
+            this.todoListController.addPropertyChangeListener("content.completed", this);
+            this.applyFilter();
             this.load();
+        }
+    },
+
+    handleChange: {
+        value: function(notification) {
+            console.log("handleChange", notification)
+            this.todoListController.organizeObjects();
+        }
+    },
+
+    handleHashchange: {
+        value: function() {
+           this.applyFilter();
+        }
+    },
+
+    filters: {
+        distinct: true,
+        value: {
+            active: function(todo) {
+                return !todo.completed;
+            },
+            completed: function(todo) {
+                return todo.completed;
+            }
+        }
+    },
+
+    applyFilter: {
+        value: function() {
+
+            var match = window.location.hash.match(/#\/(.*)$/),
+                filter = null;
+
+            if (match && match[1]) {
+                filter = this.filters[match[1]];
+            }
+
+            this.todoListController.filterFunction = filter;
         }
     },
 
@@ -109,23 +152,23 @@ exports.Main = Montage.create(Component, {
     },
 
     allCompleted: {
-        dependencies: ["todoListController.organizedObjects.completed"],
+        dependencies: ["todoListController.content.completed"],
         get: function() {
-            return this.todoListController.organizedObjects.getProperty("completed").all();
+            return this.todoListController.content.getProperty("completed").all();
         },
         set: function(value) {
-            this.todoListController.organizedObjects.forEach(function(member) {
+            this.todoListController.content.forEach(function(member) {
                 member.completed = value;
             });
         }
     },
 
     todosLeft: {
-        dependencies: ["todoListController.organizedObjects.completed"],
+        dependencies: ["todoListController.content.completed"],
         get: function() {
 
-            if (this.todoListController.organizedObjects) {
-                var todos = this.todoListController.organizedObjects;
+            if (this.todoListController.content) {
+                var todos = this.todoListController.content;
                 return todos.filter(function(member) {
                     return !member.completed;
                 });
@@ -134,11 +177,11 @@ exports.Main = Montage.create(Component, {
     },
 
     completedTodos: {
-        dependencies: ["todoListController.organizedObjects.completed"],
+        dependencies: ["todoListController.content.completed"],
         get: function() {
 
-            if (this.todoListController.organizedObjects) {
-                var todos = this.todoListController.organizedObjects;
+            if (this.todoListController.content) {
+                var todos = this.todoListController.content;
                 return todos.filter(function(member) {
                     return member.completed;
                 });
@@ -148,7 +191,7 @@ exports.Main = Montage.create(Component, {
 
     handleClearCompletedButtonAction: {
         value: function(evt) {
-            var completedTodos = this.todoListController.organizedObjects.filter(function(todo) {
+            var completedTodos = this.todoListController.content.filter(function(todo) {
                 return todo.completed;
             });
 
