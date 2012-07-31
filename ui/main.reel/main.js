@@ -82,11 +82,13 @@ exports.Main = Montage.create(Component, {
         value: function(evt) {
             evt.preventDefault();
 
-            if ("" === this.newTodoInput.value) {
+            var title = this.newTodoInput.value.trim();
+
+            if ("" === title) {
                 return;
             }
 
-            this.createTodo(this.newTodoInput.value);
+            this.createTodo(title);
             this.newTodoInput.value = null;
         }
     },
