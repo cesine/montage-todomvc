@@ -100,6 +100,16 @@
             }
         },
 
+        "clearCompletedContainer": {
+            "prototype": "montage/ui/dynamic-element.reel",
+            "properties": {
+                "element": {"#": "clear-completed-container"}
+            },
+            "bindings": {
+                "classList.visible": {"<-": "@owner.completedTodos.0"}
+            }
+        },
+
         "clearCompletedButton": {
             "prototype": "montage/ui/native/button.reel",
             "properties": {
@@ -135,7 +145,9 @@
                 </section>
                 <footer data-montage-id="footer" id="footer">
                     <span id="todo-count"><strong data-montage-id="todo-count">0</strong> <span data-montage-id="todo-count-wording">items</span> left</span>
-                    <button data-montage-id="clear-completed" id="clear-completed">Clear completed (<span data-montage-id="completed-count">0</span>)</button>
+                    <form data-montage-id="clear-completed-container" id="clear-completed-container">
+                        <button data-montage-id="clear-completed" id="clear-completed">Clear completed (<span data-montage-id="completed-count">0</span>)</button>
+                    </form>
                 </footer>
             </section>
             <footer id="info">
