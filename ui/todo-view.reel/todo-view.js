@@ -31,6 +31,12 @@ exports.TodoView = Montage.create(Component, {
 
     captureDestroyButtonAction: {
         value: function() {
+            this.dispatchDestroy();
+        }
+    },
+
+    dispatchDestroy: {
+        value: function() {
             this.dispatchEventNamed("destroyTodo", true, true, {todo: this.todo})
         }
     },
@@ -96,7 +102,15 @@ exports.TodoView = Montage.create(Component, {
 
     _submitTitle: {
         value: function() {
-            this.todo.title = this.editInput.value.trim();
+
+            var title = this.editInput.value.trim();
+
+            if ("" === title) {
+                this.dispatchDestroy();
+            } else {
+                this.todo.title = title;
+            }
+
             this.isEditing = false;
         }
     },
